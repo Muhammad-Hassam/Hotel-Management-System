@@ -27,12 +27,22 @@ export default function AlignItemsList() {
   const [data, setData] = useState([]);
   useEffect(() => {
     database.ref("/HMS").child("user").on('value', snapshot => {
+      if(snapshot.exists()){
       setData(Object.values((snapshot.val())))
+      }
+      else{
+      setData([])
+      }
     })
   }, [])
   const classes = useStyles();
-  const hoteldata = data.filter(data => data.role == 'hotel')
-  
+  let hoteldata=[]
+  if(data){
+  hoteldata = data.filter(data => data.role == 'hotel')
+}
+  else{
+    hoteldata = [];
+  }
   return (
     <Container fixed style={{marginTop:'60px'}}>
       <Grid sm={12} md={12} xs={12}>

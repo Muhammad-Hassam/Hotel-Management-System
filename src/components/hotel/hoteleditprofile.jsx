@@ -26,6 +26,9 @@ const Hotelprofileupdate = () => {
       email:data.email,
       description:data.description,
       imageURL:data.imageURL,
+      singleroomprice:data.singleroomprice,
+      doubleroomprice:data.doubleroomprice,
+      kingroomprice:data.kingroomprice,
       address:data.address,
       contact:data.contact,
       facility:data.facility,
@@ -40,6 +43,9 @@ const Hotelprofileupdate = () => {
         email,
         description,
         imageURL,
+        singleroomprice,
+        doubleroomprice,
+        kingroomprice,
         address,
         contact,
         facility,
@@ -58,6 +64,9 @@ const Hotelprofileupdate = () => {
         rooms:rooms,
         description:description,
         signlebed:singlebed,
+        singleroomprice:singleroomprice,
+        doubleroomprice:doubleroomprice,
+        kingroomprice:kingroomprice,
         doublebed:doublebed,
         kingsizebed:kingsizebed,
       })
@@ -228,6 +237,21 @@ const Hotelprofileupdate = () => {
                     }}
                     variant='filled'
                   />
+                       <TextField
+                    label='Per Day of Single Bed Rooms'
+                    style={{ margin: 8 }}
+                    placeholder='Enter Price of single Bed Rooms'
+                    helperText=''
+                    fullWidth
+                    type='number'
+                    margin='normal'
+                    value={formik.values.singleroomprice}
+                    onChange={formik.handleChange('singleroomprice')}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant='filled'
+                  />
                     <TextField
                     label='Double Bed Rooms'
                     style={{ margin: 8 }}
@@ -243,6 +267,21 @@ const Hotelprofileupdate = () => {
                     }}
                     variant='filled'
                   />
+                     <TextField
+                    label='Per Day of  Double Bed Rooms'
+                    style={{ margin: 8 }}
+                    placeholder='Enter Price of Double Bed Rooms'
+                    helperText=''
+                    fullWidth
+                    type='number'
+                    margin='normal'
+                    value={formik.values.doubleroomprice}
+                    onChange={formik.handleChange('doubleroomprice')}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant='filled'
+                  />
                     <TextField
                     label='King Size Bed Rooms'
                     style={{ margin: 8 }}
@@ -253,6 +292,21 @@ const Hotelprofileupdate = () => {
                     margin='normal'
                     value={formik.values.kingsizebed}
                     onChange={formik.handleChange('kingsizebed')}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant='filled'
+                  />
+                    <TextField
+                    label='Per Day of King Size Bed Rooms'
+                    style={{ margin: 8 }}
+                    placeholder='Enter price of King Size Bed Rooms'
+                    helperText=''
+                    fullWidth
+                    type='number'
+                    margin='normal'
+                    value={formik.values.kingroomprice}
+                    onChange={formik.handleChange('kingroomprice')}
                     InputLabelProps={{
                       shrink: true,
                     }}

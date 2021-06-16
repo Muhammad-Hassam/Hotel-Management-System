@@ -17,4 +17,4 @@ import 'firebase/storage';
   const database=firebase.database();
   const Storage=firebase.storage();
 
-export {auth,database,Storage};
+export {auth,database,Storage,firebase};

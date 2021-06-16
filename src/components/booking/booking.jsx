@@ -1,3 +1,4 @@
+import React,{useState,useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,9 +8,27 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-
+import { database,auth } from '../config/firebase';
 
 const Bookinghistory=()=>{
+const [data,setData]=useState([]);
+
+useEffect(()=>{
+    auth.onAuthStateChanged((user) => {
+      if(user){
+        database.ref("/HMS").child("booking/").on('value', snapshot => {
+          if(snapshot.exists()){
+            setData(Object.values((snapshot.val())))
+          }
+          else{
+            setData([]);
+          }
+        })
+      }
+    })
+  },[])
+  
+  const booking = data.filter(data => data.userid == auth.currentUser.uid)
 
     const StyledTableCell = withStyles((theme) => ({
         head: {
@@ -55,19 +74,26 @@ const Bookinghistory=()=>{
             <StyledTableCell >Total Cost</StyledTableCell>
           </TableRow>
         </TableHead>
-        {/* <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+        <TableBody>
+          {booking.map((user,index) => {
+            return(
+              <StyledTableRow key={user.name}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {index}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align=s"right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell align="left">{user.hotelname}</StyledTableCell>
+              <StyledTableCell align="left">{user.startdate}</StyledTableCell>
+              <StyledTableCell align="left">{user.enddate}</StyledTableCell>
+              <StyledTableCell align="left">{new Date(user.bookingdate).toLocaleDateString()}</StyledTableCell>
+              <StyledTableCell align="left">Room No {user.roomno}</StyledTableCell>
+              <StyledTableCell align="left">{user.roomtype}</StyledTableCell>
+              <StyledTableCell align="left">{user.totalcost}</StyledTableCell>
             </StyledTableRow>
-          ))}
-        </TableBody> */}
+            )
+             
+          }
+)}
+        </TableBody>
       </Table>
     </TableContainer>
 </Grid>

@@ -14,15 +14,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Swal from 'sweetalert2';
-import {database} from '../config/firebase'
+import {auth,database} from '../config/firebase'
+import moment from 'moment'
+
 
 
 const Hotelprofile = (props) => {
+  console.log(moment().format('MMMM Do YYYY'));
   const userData = useSelector((state) => state.status);  
   const [user] = useState(userData.loginStatus);
   const { id } = useParams();
   const data = props.location.state; 
-  console.log(data);
   const history=useHistory();
   const [roomno,setRoomno]=useState(0);
   const [room,setroom]=useState("")
@@ -30,6 +32,7 @@ const Hotelprofile = (props) => {
   const [eday,seteroom]=useState("");
   const [slots,setslot]=useState(false)
   const [count,setCount]=useState('')
+  const [card,setcard]=useState(false)
 const handleroom=(e)=>{
 setroom(e.target.value)
 }
@@ -58,14 +61,25 @@ setroom(e.target.value)
     Swal.fire('SomeThing is incomplete')
   }
   }
-  console.log('count',count)
 const handleRoomno=(e)=>{
   setRoomno(e.target.value);
+  setcard(true);
 }
 
-console.log('room',room)
   const Done=()=>{
-  // database.ref
+    database.ref("/HMS").child("booking/").push({
+      userid:auth.currentUser.uid,
+      hotelid:data.id,
+      hotelname:data.uname,
+      username:userData.user.uname,
+      startdate:sday,
+      enddate:eday,
+      bookingdate:new Date().toString(),
+      roomtype: room,
+      roomno:roomno,
+      totalcost:'',
+  }) .then(()=>console.log("User added successfully"))
+  .catch((err)=>console.log(err));
   }
   return (
     <>
@@ -126,6 +140,24 @@ console.log('room',room)
               </p>
               <p>
                 <span>
+                  <b>Per Day of Single Bed Room: </b>
+                </span>
+                <span>{data.singleroomprice} PKR</span>
+              </p>
+              <p>
+                <span>
+                  <b>Per Day of Double Bed Room: </b>
+                </span>
+                <span>{data.doubleroomprice} PKR</span>
+              </p>
+              <p>
+                <span>
+                  <b>Per Day of King Size Bed Room: </b>
+                </span>
+                <span>{data.kingroomprice} PKR</span>
+              </p>
+              <p>
+                <span>
                   <b>Contact No: </b>
                 </span>
                 <span>{data.contact}</span>
@@ -172,6 +204,8 @@ console.log('room',room)
                   label='Start Day'
                   style={{ margin: 6, marginBottom: '20px' }}
                   placeholder='Enter Hotel Name'
+                  inputProps={{ min: moment().format("YYYY-MM-DD") }}
+                  // min={moment().format("YYYY-MM-DD")}
                   helperText=''
                   type="date"
                   fullWidth
@@ -191,6 +225,7 @@ console.log('room',room)
                   type="date"
                   style={{ margin: 6, marginBottom: '20px' }}
                   placeholder='Enter Hotel Name'
+                  inputProps={{ min: moment().format("YYYY-MM-DD")&&sday}}
                   helperText=''
                   fullWidth
                   value={eday}
@@ -229,8 +264,29 @@ console.log('room',room)
                     )
                   })}
                 </Select>
-                
-                {/* <Button style={{backgroundColor:'#545001' ,color:'#fff',marginBottom:'20px'}} variant="contained" onClick={()=>Done()}/> */}
+               {card===true?
+               <>
+                   <TextField
+                   label='Card No'
+                   type="number"
+                   min="1" 
+                   max="10"
+                   style={{ margin: 6, marginBottom: '20px' }}
+                   placeholder='Enter Valid Card No'
+                   helperText=''
+                   fullWidth
+                   margin='normal'
+                   InputLabelProps={{
+                     shrink: true,
+                   }}
+                   style={{
+                    marginTop:'5px',
+                   }}
+                   variant='filled'
+                 /> 
+                <Button style={{backgroundColor:'#545001' ,color:'#fff',marginBottom:'20px'}} variant="contained" onClick={()=>Done()}>Done</Button>
+                </>
+              :null} 
               </Grid>
            }
               

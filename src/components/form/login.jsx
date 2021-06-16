@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useHistory } from 'react-router';
-import {database,auth} from '../config/firebase';
+import {database,auth,firebase} from '../config/firebase';
 import {useDispatch} from 'react-redux';
 import userStatus from '../redux/action/index';
 import Header from '../header';
@@ -14,7 +14,10 @@ import Footer from '../footer';
 import * as Yup from 'yup';
 
 
+
 const SignUp = () => {
+  const googleProvider = new firebase.auth.GoogleAuthProvider()
+
   const dispatch = useDispatch();
   const [User, setUser] = useState([])
   const history = useHistory();
@@ -52,6 +55,26 @@ const SignUp = () => {
       .catch(error => alert(error.message))
     },
   });
+
+  const signInWithGoogle = () => {
+    auth.signInWithPopup(googleProvider).then(({ user }) => {
+      database.ref("/HMS").child("user/"+user.uid).on('value',data => {
+        setUser(data.val())
+        // console.log(data.val());
+        dispatch(
+          userStatus({
+            loginStatus: true,
+            role: data.val().role,
+            user:data.val(),
+          })
+        );
+       }) 
+      .then(()=>console.log('datasaved'))
+      .catch((err)=>console.log(err))
+    }).catch((error) => {
+      console.log(error.message);
+    })
+  }
 
   return (
     <>
@@ -115,7 +138,7 @@ const SignUp = () => {
                 )}
               </Grid>
               <Grid container>
-                <Grid xs={3} md={3} sm={3} item>
+                <Grid xs={4} md={4} sm={4} item>
                   <Button
                     variant='contained'
                     color='default'
@@ -130,14 +153,40 @@ const SignUp = () => {
                     Login
                   </Button>
                 </Grid>
-                <Grid xs={3} md={3} sm={3} item></Grid>
-                <Grid xs={6} md={6} sm={6} style={{ marginTop: '15px' }} item>
+                <Grid xs={2} md={2} sm={2} item></Grid>
+                <Grid xs={6} md={6} sm={6} item>
+                  <Button
+                    variant='contained'
+                    color='default'
+                    style={{
+                      marginTop: '10px',
+                      marginBottom: '15px',
+                      backgroundColor:'#545001',
+                      color:'#fff',
+                      marginLeft:'10px',
+                    }}
+                    onClick={signInWithGoogle}
+                  >
+                    Google login
+                  </Button>
+                  </Grid>
+                  <Grid container>
+                <Grid xs={6} md={6} sm={6} style={{ marginTop: '15px',marginBottom:'15px',textAlign:'center' }} item>
                   <Link 
-                    style={{ color: '#000', marginLeft: '10px' }} 
+                    style={{ color: '#000', textAlign:'left'}} 
                      to='/signup' 
                    >
                     Not have account!
+                  </Link>
+                  </Grid>
+                  <Grid xs={6} md={6} sm={6} style={{ marginTop: '15px',marginBottom:'15px',textAlign:'center' }} item> 
+                  <Link 
+                    style={{ color: '#000', textAlign:'right'}} 
+                     to='/forgetpassword' 
+                   >
+                    Forget Password!
                   </Link> 
+                </Grid>
                 </Grid>
               </Grid>
             </Card>

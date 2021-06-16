@@ -96,7 +96,7 @@ const Hotelprofile = () => {
                 <span>
                   <b>Per Day of Single Bed Room: </b>
                 </span>
-                <span>{data.singleroomprice}</span>
+                <span>{data.singleroomprice} PKR</span>
               </p>
               <p>
                 <span>
@@ -108,7 +108,7 @@ const Hotelprofile = () => {
                 <span>
                   <b>Per Day of Double Bed Room: </b>
                 </span>
-                <span>{data.doubleroomprice}</span>
+                <span>{data.doubleroomprice} PKR</span>
               </p>
               <p>
                 <span>
@@ -118,9 +118,9 @@ const Hotelprofile = () => {
               </p>
               <p>
                 <span>
-                  <b>Per Day of Single Bed Room: </b>
+                  <b>Per Day of King Size Bed Room: </b>
                 </span>
-                <span>{data.kingroomprice}</span>
+                <span>{data.kingroomprice} PKR</span>
               </p>
               <p>
                 <span>

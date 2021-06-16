@@ -3,6 +3,8 @@ import Signup from '../form/signup';
 import Login from '../form/login';
 import Hoteldetails from '../hotel/hoteldetail'
 import Dashboard from '../dashboard/userdashboard';
+import Googlelogin from '../form/googlelogin'
+import Forgetpassword from '../form/forgetpassword'
 import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -20,11 +22,13 @@ const Routers = () => {
     <Router>
              <Switch>
 
-            {userData.loginStatus===true ? <Dashboard/>:
+            {userData.loginStatus===true&&userData.role!=="" ? <Dashboard/>:userData.loginStatus===true&&userData.role===""?<Googlelogin/>:
             <>
              <Route exact path='/' component={Home} />
              <Route path='/signup' component={Signup} />
              <Route path='/login' component={Login} />
+             <Route path='/dashboard' component={Dashboard}/>
+             <Route path='/forgetpassword' component={Forgetpassword}/>
              <Route path='/hoteldetail/:id' component={Hoteldetails} />
               <Route path='*'>
                <Redirect to='/' />

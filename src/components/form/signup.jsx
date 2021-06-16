@@ -12,9 +12,10 @@ import { useHistory } from 'react-router';
 import Header from '../header';
 import Footer from '../footer';
 import Swal from 'sweetalert2';
-import {database,auth} from '../config/firebase'
+import {database,auth,firebase} from '../config/firebase';
 import * as Yup from 'yup';
 const SignUp = () => {
+  const googleProvider = new firebase.auth.GoogleAuthProvider()
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -71,8 +72,28 @@ const SignUp = () => {
         }
         })
         .catch(error => alert(error.message))
+        history.push('/login')
+
     },
+    
   });
+
+const signInWithGoogle = () => {
+    auth.signInWithPopup(googleProvider).then(({ user }) => {
+      database.ref("/HMS").child("user/"+user.uid).set({
+        id:user.uid,
+        role:"",
+        uname:user.displayName,
+        imageURL:user.photoURL,
+      })
+      .then(()=>{
+        history.push('/login')
+        console.log('datasaved')})
+      .catch((err)=>console.log(err))
+    }).catch((error) => {
+      console.log(error.message);
+    })
+  }
 
   return (
     <>
@@ -161,7 +182,23 @@ const SignUp = () => {
                 )}
               </Grid>
               <Grid container>
-                <Grid xs={12} md={12} sm={12} item>
+                <Grid xs={6} md={6} sm={6} item style={{textAlign:"left"}}>
+                  <Button
+                    variant='contained'
+                    color='default'
+                    style={{
+                      marginTop: '10px',
+                      marginBottom: '15px',
+                      backgroundColor:'#545001',
+                      marginLeft:'20px',
+                      color:'#fff'
+                    }}
+                    type='submit'
+                  >
+                    Signup
+                  </Button>
+                </Grid>
+                <Grid xs={6} md={6} sm={6} item>
                   <Button
                     variant='contained'
                     color='default'
@@ -171,11 +208,11 @@ const SignUp = () => {
                       backgroundColor:'#545001',
                       color:'#fff'
                     }}
-                    type='submit'
+                    onClick={signInWithGoogle}
                   >
-                    Signup
+                    Google Signup 
                   </Button>
-                </Grid>
+                  </Grid>
               </Grid>
             </Card>
           </Grid>
