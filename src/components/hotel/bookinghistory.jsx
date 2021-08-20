@@ -56,7 +56,7 @@ const Bookinghistory = () => {
                   <StyledTableCell>Booking Date</StyledTableCell>
                   <StyledTableCell>Room Type</StyledTableCell>
                   <StyledTableCell>Room No</StyledTableCell>
-                  <StyledTableCell>Total Cost</StyledTableCell>
+                  {/* <StyledTableCell>Total Cost</StyledTableCell> */}
                 </TableRow>
               </TableHead>
               s

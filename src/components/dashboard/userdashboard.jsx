@@ -260,7 +260,7 @@ function ResponsiveDrawer(props) {
           <Switch>
             <Route
               exact
-              path="/"
+              path="/login"
               component={userData.role === "hotel" ? Hotelprofile : Profile}
             />
             <Route path="/profile" component={Profile} />
